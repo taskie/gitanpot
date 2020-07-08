@@ -39,6 +39,7 @@ Blob.getInitialProps = async ({ query: rawQuery }) => {
     const { data } = await axios.get(path, { ...defaultRequestConfig });
     return { response: data };
   } catch (err) {
+    console.error(err);
     return { err: err.message };
   }
 };
