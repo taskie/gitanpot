@@ -2,6 +2,8 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Breadcrumb from "../../../../../components/Breadcrumb";
+import { defaultRequestConfig } from "../../../../../api/apiClient";
+import { uria } from "../../../../../utils/uri";
 
 type Response = {
   ok: boolean;
@@ -33,10 +35,8 @@ export const Blob: NextPage<Props> = (props) => {
 Blob.getInitialProps = async ({ query: rawQuery }) => {
   try {
     const { user, repo, rev, path: blobPath } = (rawQuery as unknown) as Query;
-    const baseURL = "http://localhost:3000";
-    const path = baseURL + `/api/${user}/${repo}/blob/${rev}/${blobPath.join("/")}`;
-    console.log(path);
-    const { data } = await axios.get(path);
+    const path = uria`${user}/${repo}/blob/${rev}` + blobPath.join("/");
+    const { data } = await axios.get(path, { ...defaultRequestConfig });
     return { response: data };
   } catch (err) {
     return { err: err.message };

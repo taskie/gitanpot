@@ -4,6 +4,7 @@ import axios from "axios";
 import TreeEntryList from "../../../../../components/TreeEntryList";
 import { uria } from "../../../../../utils/uri";
 import Breadcrumb from "../../../../../components/Breadcrumb";
+import { defaultRequestConfig } from "../../../../../api/apiClient";
 
 function ensureQueryIsString(s: string | string[]): string {
   if (typeof s === "string") {
@@ -23,10 +24,9 @@ type Query = {
 type Response = {
   ok: boolean;
   entries: { hash: string; name: string; mode: number }[];
-  err: any;
 };
 
-type Props = { response?: Response };
+type Props = { response?: Response; err?: string };
 
 export const Tree: NextPage<Props> = (props) => {
   const router = useRouter();
@@ -39,7 +39,7 @@ export const Tree: NextPage<Props> = (props) => {
       {props.response != null ? (
         <TreeEntryList user={user} repo={repo} rev={rev} basePath={treePath} entries={props.response.entries} />
       ) : (
-        <p>Some error occured.</p>
+        <p>Some error occured: {props.err}</p>
       )}
     </div>
   );
@@ -48,10 +48,8 @@ export const Tree: NextPage<Props> = (props) => {
 Tree.getInitialProps = async ({ query: rawQuery }) => {
   try {
     const { user, repo, rev, path: treePath } = (rawQuery as unknown) as Query;
-    const baseURL = "http://localhost:3000";
-    const path = baseURL + uria`/api/${user}/${repo}/tree/${rev}/` + treePath.map(encodeURIComponent).join("/");
-    console.log(path);
-    const { data } = await axios.get(path);
+    const path = uria`${user}/${repo}/tree/${rev}/` + treePath.map(encodeURIComponent).join("/");
+    const { data } = await axios.get(path, { ...defaultRequestConfig });
     return { response: data };
   } catch (err) {
     return { err: err.message };

@@ -22,22 +22,22 @@ export const Breadcrumb: React.FC<Props> = ({ user, repo, rev, basePath }) => {
       <Link href={uri`/${user}/${repo}/tree/${rev}`}>
         <a>{rev}</a>
       </Link>
-      {basePath.map((comp, i) => (
-        <>
-          {" / "}
-          <Link
-            href={
-              uri`/${user}/${repo}/tree/${rev}/` +
-              basePath
-                .slice(0, i + 1)
-                .map(encodeURIComponent)
-                .join("/")
-            }
-          >
-            <a>{comp}</a>
-          </Link>
-        </>
-      ))}
+      {basePath.map((comp, i) => {
+        const href =
+          uri`/${user}/${repo}/tree/${rev}/` +
+          basePath
+            .slice(0, i + 1)
+            .map(encodeURIComponent)
+            .join("/");
+        return (
+          <div key={href}>
+            {" / "}
+            <Link href={href}>
+              <a>{comp}</a>
+            </Link>
+          </div>
+        );
+      })}
     </nav>
   );
 };
