@@ -1,10 +1,9 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import axios from "axios";
 import TreeEntryList from "../../../../components/TreeEntryList";
 import { uria } from "../../../../utils/uri";
 import Breadcrumb from "../../../../components/Breadcrumb";
-import { defaultRequestConfig } from "../../../../api/apiClient";
+import { defaultInstance } from "../../../../api/apiClient";
 
 type Query = {
   user: string;
@@ -42,7 +41,7 @@ Tree.getInitialProps = async ({ query: rawQuery }) => {
   try {
     const { user, repo, rev } = (rawQuery as unknown) as Query;
     const path = uria`${user}/${repo}/tree/${rev}/`;
-    const { data } = await axios.get(path, { ...defaultRequestConfig });
+    const { data } = await defaultInstance.get(path);
     return { response: data };
   } catch (err) {
     console.error(err);
