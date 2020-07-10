@@ -30,12 +30,12 @@ export const Breadcrumb: React.FC<Props> = ({ user, repo, rev, basePath }) => {
             .map(encodeURIComponent)
             .join("/");
         return (
-          <div key={href}>
+          <span key={href}>
             {" / "}
             <Link href={href}>
               <a>{comp}</a>
             </Link>
-          </div>
+          </span>
         );
       })}
     </nav>
