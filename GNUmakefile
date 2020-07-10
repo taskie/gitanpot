@@ -3,10 +3,10 @@
 build: assets/solarized-light.css
 	yarn build
 
-.PHONY: serve
+.PHONY: start
 
-serve:
-	yarn serve
+start:
+	yarn start
 
 assets/solarized-light.css:
 	assets/download.sh
