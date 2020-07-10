@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import TreeEntryList from "../../../../../components/TreeEntryList";
 import { uria } from "../../../../../utils/uri";
@@ -33,6 +34,11 @@ export const Tree: NextPage<Props> = (props) => {
   const { user, repo, rev, path: treePath } = (rawQuery as unknown) as Query;
   return (
     <div className="container">
+      <Head>
+        <title>
+          {treePath.join("/")} - {user}/{repo} - gitanpot
+        </title>
+      </Head>
       <Breadcrumb user={user} repo={repo} rev={rev} basePath={treePath.slice(0, treePath.length - 1)} />
       <h1>{treePath[treePath.length - 1]}</h1>
       {props.response != null ? (

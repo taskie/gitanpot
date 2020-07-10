@@ -39,7 +39,7 @@ export const Blob: NextPage<Props> = (props) => {
     <div className="container">
       <Head>
         <title>
-          {blobPath.join("/")} - {user}/{repo}
+          {blobPath.join("/")} - {user}/{repo} - gitanpot
         </title>
       </Head>
       <Breadcrumb user={user} repo={repo} rev={rev} basePath={blobPath.slice(0, blobPath.length - 1)} />
