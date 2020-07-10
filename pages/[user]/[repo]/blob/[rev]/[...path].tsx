@@ -31,7 +31,7 @@ export const Blob: NextPage<Props> = (props) => {
   if (["png", "gif", "jpg", "webp"].includes(extName)) {
     content = <img src={`/api/${user}/${repo}/blob/${rev}/${blobPath.join("/")}`} />;
   } else if (["mp3", "mp4", "m4a", "webm"].includes(extName)) {
-    content = <video src={`/api/${user}/${repo}/blob/${rev}/${blobPath.join("/")}`} />;
+    content = <video src={`/api/${user}/${repo}/blob/${rev}/${blobPath.join("/")}`} controls />;
   } else {
     content = <HighLight className={extName}>{props.response}</HighLight>;
   }
