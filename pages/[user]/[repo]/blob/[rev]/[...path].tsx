@@ -1,9 +1,9 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import Breadcrumb from "../../../../../components/Breadcrumb";
-import { defaultInstance } from "../../../../../api/apiClient";
-import { uria } from "../../../../../utils/uri";
+import Breadcrumb from "@/components/Breadcrumb";
+import { defaultInstance } from "@/api/apiClient";
+import { uria } from "@/utils/uri";
 import HighLight from "react-highlight";
 
 type Response = {

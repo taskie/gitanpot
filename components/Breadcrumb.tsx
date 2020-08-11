@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { uri } from "../utils/uri";
+import { uri } from "@/utils/uri";
 
 type Props = {
   user: string;

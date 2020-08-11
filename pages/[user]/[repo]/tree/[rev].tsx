@@ -1,10 +1,10 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import TreeEntryList from "../../../../components/TreeEntryList";
-import { uria } from "../../../../utils/uri";
-import Breadcrumb from "../../../../components/Breadcrumb";
-import { defaultInstance } from "../../../../api/apiClient";
+import TreeEntryList from "@/components/TreeEntryList";
+import { uria } from "@/utils/uri";
+import Breadcrumb from "@/components/Breadcrumb";
+import { defaultInstance } from "@/api/apiClient";
 
 type Query = {
   user: string;
