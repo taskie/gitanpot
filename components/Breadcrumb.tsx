@@ -1,5 +1,7 @@
-import Link from "next/link";
-import { uri } from "@/utils/uri";
+import RevLink from "./RevLink";
+import TreeLink from "./TreeLink";
+import UserLink from "./UserLink";
+import RepoLink from "./RepoLink";
 
 type Props = {
   user: string;
@@ -11,30 +13,19 @@ type Props = {
 export const Breadcrumb: React.FC<Props> = ({ user, repo, rev, basePath }) => {
   return (
     <nav>
-      <Link href={uri`/${user}/`}>
-        <a>{user}</a>
-      </Link>
+      <UserLink user={user} />
       {" / "}
-      <Link href={uri`/${user}/${repo}/`}>
-        <a>{repo}</a>
-      </Link>
+      <RepoLink user={user} repo={repo} />
       {" / "}
-      <Link href={uri`/${user}/${repo}/tree/${rev}`}>
-        <a>{rev}</a>
-      </Link>
+      <RevLink user={user} repo={repo} rev={rev} />
       {basePath.map((comp, i) => {
-        const href =
-          uri`/${user}/${repo}/tree/${rev}/` +
-          basePath
-            .slice(0, i + 1)
-            .map(encodeURIComponent)
-            .join("/");
+        const path = basePath.slice(0, i + 1).join("/");
         return (
-          <span key={href}>
+          <span key={path}>
             {" / "}
-            <Link href={href}>
+            <TreeLink user={user} repo={repo} rev={rev} path={path}>
               <a>{comp}</a>
-            </Link>
+            </TreeLink>
           </span>
         );
       })}

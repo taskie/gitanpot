@@ -1,4 +1,5 @@
-import Link from "next/link";
+import TreeLink from "./TreeLink";
+import BlobLink from "./BlobLink";
 
 type Props = {
   user: string;
@@ -10,12 +11,13 @@ type Props = {
 
 export const TreeEntry: React.FC<Props> = ({ user, repo, rev, basePath, entry }) => {
   const type = entry.mode === 16384 ? "tree" : "blob";
+  const ObjectLink = type === "tree" ? TreeLink : BlobLink;
   return (
     <li>
       <span>{type === "tree" ? "📁" : "📄"}</span>
-      <Link href={"/" + [user, repo, type, rev, ...basePath, entry.name].map(encodeURIComponent).join("/")}>
+      <ObjectLink user={user} repo={repo} rev={rev} path={basePath + "/" + entry.name}>
         <a style={{ marginLeft: "0.5rem" }}>{entry.name}</a>
-      </Link>
+      </ObjectLink>
     </li>
   );
 };
