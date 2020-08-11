@@ -13,7 +13,7 @@ app.prepare().then(() => {
   server.use(
     "/api",
     createProxyMiddleware({
-      target: "http://localhost:9999",
+      target: process.env.NEXT_PUBLIC_GITANPOT_API_BACKEND_URL || "http://localhost:9999",
       changeOrigin: true,
     }),
   );
