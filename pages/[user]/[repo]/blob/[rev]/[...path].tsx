@@ -52,11 +52,11 @@ export const Blob: NextPage<Props> = (props) => {
 Blob.getInitialProps = async ({ query: rawQuery }) => {
   try {
     const { user, repo, rev, path: blobPath } = (rawQuery as unknown) as Query;
-    const path = uria`${user}/${repo}/blob/${rev}/` + blobPath.join("/");
+    const path = uria`${user}/${repo}/blob/${rev}/` + blobPath.map((s) => encodeURIComponent(s)).join("/");
     const { data } = await defaultInstance.get(path);
     return { response: data };
   } catch (err) {
-    console.error(err);
+    // console.error(err);
     return { err: err.message };
   }
 };

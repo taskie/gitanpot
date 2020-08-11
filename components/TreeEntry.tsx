@@ -15,7 +15,7 @@ export const TreeEntry: React.FC<Props> = ({ user, repo, rev, basePath, entry })
   return (
     <li>
       <span>{type === "tree" ? "📁" : "📄"}</span>
-      <ObjectLink user={user} repo={repo} rev={rev} path={basePath + "/" + entry.name}>
+      <ObjectLink user={user} repo={repo} rev={rev} path={[...basePath, entry.name].join("/")}>
         <a style={{ marginLeft: "0.5rem" }}>{entry.name}</a>
       </ObjectLink>
     </li>

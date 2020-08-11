@@ -6,14 +6,6 @@ import { uria } from "@/utils/uri";
 import Breadcrumb from "@/components/Breadcrumb";
 import { defaultInstance } from "@/api/apiClient";
 
-function ensureQueryIsString(s: string | string[]): string {
-  if (typeof s === "string") {
-    return s;
-  } else {
-    throw new Error("must be string: " + s);
-  }
-}
-
 type Query = {
   user: string;
   repo: string;
@@ -53,11 +45,11 @@ export const Tree: NextPage<Props> = (props) => {
 Tree.getInitialProps = async ({ query: rawQuery }) => {
   try {
     const { user, repo, rev, path: treePath } = (rawQuery as unknown) as Query;
-    const path = uria`${user}/${repo}/tree/${rev}/` + treePath.map(encodeURIComponent).join("/");
+    const path = uria`${user}/${repo}/tree/${rev}/` + treePath.map((s) => encodeURIComponent(s)).join("/");
     const { data } = await defaultInstance.get(path);
     return { response: data };
   } catch (err) {
-    console.error(err);
+    // console.error(err);
     return { err: err.message };
   }
 };
