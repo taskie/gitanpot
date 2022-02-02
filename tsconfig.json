@@ -19,12 +19,13 @@
     },
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+    "incremental": true
   },
   "include": [
     "**/*.ts",
     "**/*.tsx"
-  ], 
+  ],
   "exclude": [
     "node_modules"
   ]

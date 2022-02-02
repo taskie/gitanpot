@@ -23,7 +23,7 @@ type Props = { response?: Response; err?: string };
 export const Tree: NextPage<Props> = (props) => {
   const router = useRouter();
   const { query: rawQuery } = router;
-  const { user, repo, rev, path: treePath } = (rawQuery as unknown) as Query;
+  const { user, repo, rev, path: treePath } = rawQuery as unknown as Query;
   return (
     <div className="container">
       <Head>
@@ -44,11 +44,11 @@ export const Tree: NextPage<Props> = (props) => {
 
 Tree.getInitialProps = async ({ query: rawQuery }) => {
   try {
-    const { user, repo, rev, path: treePath } = (rawQuery as unknown) as Query;
+    const { user, repo, rev, path: treePath } = rawQuery as unknown as Query;
     const path = uria`${user}/${repo}/tree/${rev}/` + treePath.map((s) => encodeURIComponent(s)).join("/");
     const { data } = await defaultInstance.get(path);
     return { response: data };
-  } catch (err) {
+  } catch (err: any) {
     // console.error(err);
     return { err: err.message };
   }
