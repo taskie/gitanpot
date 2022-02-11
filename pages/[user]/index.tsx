@@ -31,7 +31,7 @@ export const List: NextPage<Props> = (props) => {
       {props.response != null ? (
         <ul>
           {props.response.repos.map((r) => (
-            <li>
+            <li key={r.name}>
               <RepoLink user={user} repo={r.name}></RepoLink>
             </li>
           ))}

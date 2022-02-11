@@ -36,7 +36,7 @@ export const List: NextPage<Props> = (props) => {
       {props.response != null ? (
         <ul>
           {props.response.branches.map((b) => (
-            <li>
+            <li key={b.short_name}>
               <TreeLink user={user} repo={repo} rev={b.short_name} />
             </li>
           ))}
