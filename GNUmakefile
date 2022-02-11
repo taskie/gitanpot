@@ -7,3 +7,8 @@ build:
 
 start:
 	yarn start
+
+.PHONY: dev
+
+dev:
+	yarn dev
