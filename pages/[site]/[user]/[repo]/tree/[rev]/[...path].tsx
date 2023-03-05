@@ -7,9 +7,11 @@ import Breadcrumb from "@/components/Breadcrumb";
 import { defaultInstance } from "@/api/apiClient";
 
 type Query = {
+  site: string;
   user: string;
   repo: string;
   rev: string;
+  path: string[];
 };
 
 type Response = {
@@ -22,20 +24,25 @@ type Props = { response?: Response; err?: string };
 export const Tree: NextPage<Props> = (props) => {
   const router = useRouter();
   const { query: rawQuery } = router;
-  const { user, repo, rev } = rawQuery as unknown as Query;
+  const { site, user, repo, rev, path: treePath } = rawQuery as unknown as Query;
   return (
     <div className="container">
       <Head>
         <title>
-          {user}/{repo} - gitanpot
+          {treePath.join("/")} - {user}/{repo} - gitanpot
         </title>
       </Head>
-      <Breadcrumb user={user} repo={repo} rev={rev} basePath={[]} />
-      <h1>
-        {user} / {repo} ({rev})
-      </h1>
+      <Breadcrumb site={site} user={user} repo={repo} rev={rev} basePath={treePath.slice(0, treePath.length - 1)} />
+      <h1>{treePath[treePath.length - 1]}</h1>
       {props.response != null ? (
-        <TreeEntryList user={user} repo={repo} rev={rev} basePath={[]} entries={props.response.entries} />
+        <TreeEntryList
+          site={site}
+          user={user}
+          repo={repo}
+          rev={rev}
+          basePath={treePath}
+          entries={props.response.entries}
+        />
       ) : (
         <p>Some error occured: {props.err}</p>
       )}
@@ -45,8 +52,8 @@ export const Tree: NextPage<Props> = (props) => {
 
 Tree.getInitialProps = async ({ query: rawQuery }) => {
   try {
-    const { user, repo, rev } = rawQuery as unknown as Query;
-    const path = uria`${user}/${repo}/tree/${rev}/`;
+    const { site, user, repo, rev, path: treePath } = rawQuery as unknown as Query;
+    const path = uria`${site}/${user}/${repo}/tree/${rev}/` + treePath.map((s) => encodeURIComponent(s)).join("/");
     const { data } = await defaultInstance.get(path);
     return { response: data };
   } catch (err: any) {

@@ -2,15 +2,26 @@ import RevLink from "./RevLink";
 import TreeLink from "./TreeLink";
 import UserLink from "./UserLink";
 import RepoLink from "./RepoLink";
+import SiteLink from "./SiteLink";
 
 type Props = {
+  site: string;
   user: string;
-  repo: string;
+  repo?: string;
   rev?: string;
   basePath?: string[];
 };
 
-export const Breadcrumb: React.FC<Props> = ({ user, repo, rev, basePath }) => {
+export const Breadcrumb: React.FC<Props> = ({ site, user, repo, rev, basePath }) => {
+  if (repo == null) {
+    return (
+      <nav>
+        <SiteLink site={site} />
+        {" / "}
+        <UserLink site={site} user={user} />
+      </nav>
+    );
+  }
   let pathPart = undefined;
   if (rev != null && basePath != null) {
     pathPart = basePath.map((comp, i) => {
@@ -18,7 +29,7 @@ export const Breadcrumb: React.FC<Props> = ({ user, repo, rev, basePath }) => {
       return (
         <span key={path}>
           {" / "}
-          <TreeLink user={user} repo={repo} rev={rev} path={path}>
+          <TreeLink site={site} user={user} repo={repo} rev={rev} path={path}>
             <a>{comp}</a>
           </TreeLink>
         </span>
@@ -30,16 +41,18 @@ export const Breadcrumb: React.FC<Props> = ({ user, repo, rev, basePath }) => {
     revPart = (
       <>
         {" "}
-        / <RevLink user={user} repo={repo} rev={rev} />
+        / <RevLink site={site} user={user} repo={repo} rev={rev} />
         {pathPart}
       </>
     );
   }
   return (
     <nav>
-      <UserLink user={user} />
+      <SiteLink site={site} />
       {" / "}
-      <RepoLink user={user} repo={repo} />
+      <UserLink site={site} user={user} />
+      {" / "}
+      <RepoLink site={site} user={user} repo={repo} />
       {revPart}
     </nav>
   );

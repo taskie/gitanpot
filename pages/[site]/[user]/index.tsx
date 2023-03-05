@@ -3,17 +3,17 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { uria } from "@/utils/uri";
 import { defaultInstance } from "@/api/apiClient";
-import TreeLink from "@/components/TreeLink";
+import RepoLink from "@/components/RepoLink";
 import Breadcrumb from "@/components/Breadcrumb";
 
 type Query = {
+  site: string;
   user: string;
-  repo: string;
 };
 
 type Response = {
   ok: boolean;
-  branches: { short_name: string }[];
+  repos: { name: string }[];
 };
 
 type Props = { response?: Response; err?: string };
@@ -21,23 +21,19 @@ type Props = { response?: Response; err?: string };
 export const List: NextPage<Props> = (props) => {
   const router = useRouter();
   const { query: rawQuery } = router;
-  const { user, repo } = rawQuery as unknown as Query;
+  const { site, user } = rawQuery as unknown as Query;
   return (
     <div className="container">
       <Head>
-        <title>
-          {user} / {repo} - gitanpot
-        </title>
+        <title>{user} - gitanpot</title>
       </Head>
-      <Breadcrumb user={user} repo={repo} />
-      <h1>
-        {user} / {repo}
-      </h1>
+      <Breadcrumb site={site} user={user} />
+      <h1>{user}</h1>
       {props.response != null ? (
         <ul>
-          {props.response.branches.map((b) => (
-            <li key={b.short_name}>
-              <TreeLink user={user} repo={repo} rev={b.short_name} />
+          {props.response.repos.map((r) => (
+            <li key={r.name}>
+              <RepoLink site={site} user={user} repo={r.name}></RepoLink>
             </li>
           ))}
         </ul>
@@ -50,8 +46,8 @@ export const List: NextPage<Props> = (props) => {
 
 List.getInitialProps = async ({ query: rawQuery }) => {
   try {
-    const { user, repo } = rawQuery as unknown as Query;
-    const path = uria`${user}/${repo}`;
+    const { site, user } = rawQuery as unknown as Query;
+    const path = uria`${site}/${user}/`;
     const { data } = await defaultInstance.get(path);
     return { response: data };
   } catch (err: any) {

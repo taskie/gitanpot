@@ -12,6 +12,7 @@ type Response = {
 };
 
 type Query = {
+  site: string;
   user: string;
   repo: string;
   rev: string;
@@ -23,7 +24,7 @@ type Props = { response?: Response };
 export const Blob: NextPage<Props> = (props) => {
   const router = useRouter();
   const { query: rawQuery } = router;
-  const { user, repo, rev, path: blobPath } = rawQuery as unknown as Query;
+  const { site, user, repo, rev, path: blobPath } = rawQuery as unknown as Query;
   const baseName = blobPath[blobPath.length - 1];
   const splitted = baseName.split(".");
   const extName = splitted.length >= 2 ? splitted[splitted.length - 1] : "txt";
@@ -42,7 +43,7 @@ export const Blob: NextPage<Props> = (props) => {
           {blobPath.join("/")} - {user}/{repo} - gitanpot
         </title>
       </Head>
-      <Breadcrumb user={user} repo={repo} rev={rev} basePath={blobPath.slice(0, blobPath.length - 1)} />
+      <Breadcrumb site={site} user={user} repo={repo} rev={rev} basePath={blobPath.slice(0, blobPath.length - 1)} />
       <h1>{blobPath[blobPath.length - 1]}</h1>
       {content}
     </div>
@@ -51,8 +52,8 @@ export const Blob: NextPage<Props> = (props) => {
 
 Blob.getInitialProps = async ({ query: rawQuery }) => {
   try {
-    const { user, repo, rev, path: blobPath } = rawQuery as unknown as Query;
-    const path = uria`${user}/${repo}/blob/${rev}/` + blobPath.map((s) => encodeURIComponent(s)).join("/");
+    const { site, user, repo, rev, path: blobPath } = rawQuery as unknown as Query;
+    const path = uria`${site}/${user}/${repo}/blob/${rev}/` + blobPath.map((s) => encodeURIComponent(s)).join("/");
     const { data } = await defaultInstance.get(path);
     return { response: data };
   } catch (err: any) {

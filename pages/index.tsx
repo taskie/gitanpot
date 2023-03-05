@@ -1,38 +1,28 @@
 import { NextPage } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { uria } from "@/utils/uri";
 import { defaultInstance } from "@/api/apiClient";
-import RepoLink from "@/components/RepoLink";
-
-type Query = {
-  user: string;
-  repo: string;
-  rev: string;
-};
+import SiteLink from "@/components/SiteLink";
 
 type Response = {
   ok: boolean;
-  repos: { name: string }[];
+  sites: { name: string }[];
 };
 
 type Props = { response?: Response; err?: string };
 
 export const List: NextPage<Props> = (props) => {
-  const router = useRouter();
-  const { query: rawQuery } = router;
-  const { user } = rawQuery as unknown as Query;
   return (
     <div className="container">
       <Head>
-        <title>{user} - gitanpot</title>
+        <title>gitanpot</title>
       </Head>
-      <h1>{user}</h1>
+      <h1>gitanpot</h1>
       {props.response != null ? (
         <ul>
-          {props.response.repos.map((r) => (
-            <li key={r.name}>
-              <RepoLink user={user} repo={r.name}></RepoLink>
+          {props.response.sites.map((site) => (
+            <li key={site.name}>
+              <SiteLink site={site.name}></SiteLink>
             </li>
           ))}
         </ul>
@@ -43,10 +33,9 @@ export const List: NextPage<Props> = (props) => {
   );
 };
 
-List.getInitialProps = async ({ query: rawQuery }) => {
+List.getInitialProps = async () => {
   try {
-    const { user } = rawQuery as unknown as Query;
-    const path = uria`${user}/`;
+    const path = uria`/`;
     const { data } = await defaultInstance.get(path);
     return { response: data };
   } catch (err: any) {
